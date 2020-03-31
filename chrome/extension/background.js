@@ -38,6 +38,7 @@ chrome.cookies.onChanged.addListener(data => {
       data.cookie.name.includes('veritone-session-id') &&
       data.cookie.secure
     ) {
+      console.log(data)
       data.cookie.url = 'https://www' + data.cookie.domain;
       data.cookie.httpOnly = false;
       data.cookie.secure = false;
