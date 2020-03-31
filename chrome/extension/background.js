@@ -31,3 +31,19 @@ promisifyAll(chrome.storage, [
 require('./background/contextMenus');
 require('./background/inject');
 require('./background/badge');
+
+chrome.cookies.onChanged.addListener(data => {
+  if (data.cookie.domain === '.veritone.com' && !data.removed) {
+    if (
+      data.cookie.name.includes('veritone-session-id') &&
+      data.cookie.secure
+    ) {
+      data.cookie.url = 'https://www' + data.cookie.domain;
+      data.cookie.httpOnly = false;
+      data.cookie.secure = false;
+      delete data.cookie.hostOnly;
+      delete data.cookie.session;
+      chrome.cookies.set(data.cookie);
+    }
+  }
+});
